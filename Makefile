@@ -7,7 +7,7 @@ all: dependencies install
 dependencies:
 	apt install python3-pip
 	apt install billmanager-plugin-python-libs
-	pip install -r requirements.txt
+	pip install -r ./config/requirements.txt
 
 install:
 	# xml
