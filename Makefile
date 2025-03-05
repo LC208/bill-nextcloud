@@ -11,9 +11,9 @@ dependencies:
 
 install:
 	# xml
-	cp ./config/billmgr_mod_nextcloud.xml  $(XML_DIR)
+	cp ./config/billmgr_mod_pmnextcloud.xml  $(XML_DIR)
 	# main exec
-	ln -snf $(shell pwd)/src/nextcloud.py $(EXEC_DIR)nextcloud
-	chmod 775 $(EXEC_DIR)nextcloud
-	cp ./assets/billmanager-plugin-nextcloud.png  $(LOGO_DIR)
+	ln -snf $(shell pwd)/src/pmnextcloud.py $(EXEC_DIR)pmnextcloud
+	chmod 775 $(EXEC_DIR)pmnextcloud
+	cp ./assets/billmanager-plugin-pmnextcloud.png  $(LOGO_DIR)
 	/usr/local/mgr5/sbin/mgrctl -m billmgr -R

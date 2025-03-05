@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mgrdata>
+	<plugin name="pmnextcloud">
+		<group>processing_module</group>
+		<author>BILLmanager team</author>
+		<params>
+			<priority lang="ru">3700</priority>
+			<priority lang="en">1800</priority>
+			<type name="backupservice"/>
+		</params>
+	</plugin>
+
+	<metadata name="processing.edit.pmnextcloud" type="form">
+		<form>
+			<page name="methodprops">
+				<field name="base_url">
+					<input type="text" name="base_url" private="yes" required="yes" />
+				</field>
+				<field name="nc_username">
+					<input type="text" name="nc_username" private="yes" required="yes"/>
+				</field>
+				<field name="nc_password">
+					<input type="text" name="nc_password" private="yes" required="yes"/>
+				</field>
+			</page>
+		</form>
+	</metadata>
+
+    <lang name="ru">
+		<messages name="plugin">
+			<msg name="desc_short_pmnextcloud">NextCloud</msg>
+			<msg name="desc_full_pmnextcloud">Интеграция с NextCloud</msg>
+			<msg name="price_pmnextcloud">Бесплатно</msg>
+		</messages>
+		<messages name="label_processing_modules">
+			<msg name="pmnextcloud">NextCloud</msg>
+			<msg name="module_pmnextcloud">NextCloud</msg>
+		</messages>
+		<messages name="processing.edit.pmnextcloud">
+			<msg name="base_url">URL</msg>
+			<msg name="nc_username">dddd</msg>
+			<msg name="nc_password">sssss</msg>
+			<msg name="hint_base_url">Ссылка на базовую страницу панели NextCloud, например https://my.panel.example</msg>
+			<msg name="hint_nc_username">dsadas</msg>
+			<msg name="hint_nc_password">dsad</msg>
+			<msg name="placeholder_base_url">https://my.panel.example</msg>
+		</messages>
+	</lang>
+</mgrdata>
