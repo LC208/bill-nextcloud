@@ -38,12 +38,15 @@
 		</messages>
 		<messages name="processing.edit.pmnextcloud">
 			<msg name="base_url">URL</msg>
-			<msg name="nc_username">dddd</msg>
-			<msg name="nc_password">sssss</msg>
+			<msg name="nc_username">Имя пользователя</msg>
+			<msg name="nc_password">Пароль</msg>
 			<msg name="hint_base_url">Ссылка на базовую страницу панели NextCloud, например https://my.panel.example</msg>
-			<msg name="hint_nc_username">dsadas</msg>
-			<msg name="hint_nc_password">dsad</msg>
+			<msg name="hint_nc_username">Имя пользователя в NextCloud</msg>
+			<msg name="hint_nc_password">Пароль приложения, генерируется в NextCloud</msg>
 			<msg name="placeholder_base_url">https://my.panel.example</msg>
+		</messages>
+		<messages name="msgerror">
+			<msg name="msg_error_wrong_panel_info">Введены неверные данные панели или панель недоступна.</msg>
 		</messages>
 	</lang>
 </mgrdata>

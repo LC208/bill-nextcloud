@@ -1,2 +1,5 @@
+from utils.api import NextCloudAPI
+
+
 def open(item: int, running_operation: int) -> None:
-    pass
+    api = NextCloudAPI.from_item(item)

@@ -29,13 +29,15 @@ class NextcloudModule(ProcessingModule):
         self.add_argument("--itemtype", type=str, help="itemtype", dest="itemtype")
         self.set_description("Модуль для панели Nextcloud")
 
-        # self._add_callable_feature(Feature.OPEN, cmd.import_func("open"))
-        # self._add_callable_feature(Feature.CLOSE, cmd.import_func("close"))
-        # self._add_callable_feature(Feature.RESUME, cmd.import_func("resume"))
-        # self._add_callable_feature(Feature.SUSPEND, cmd.import_func("suspend"))
-        # self._add_callable_feature(Feature.SET_PARAM, cmd.import_func("set_param"))
+        self._add_callable_feature(
+            Feature.CHECK_CONNECTION, cmd.import_func("check_connection")
+        )
+        self._add_callable_feature(Feature.OPEN, cmd.import_func("open"))
+        self._add_callable_feature(Feature.CLOSE, cmd.import_func("close"))
+        self._add_callable_feature(Feature.RESUME, cmd.import_func("resume"))
+        self._add_callable_feature(Feature.SUSPEND, cmd.import_func("suspend"))
+        self._add_callable_feature(Feature.SET_PARAM, cmd.import_func("set_param"))
         # self._add_callable_feature(ExFeature.STAT, cmd.import_func("set_param"))
-        # self._add_callable_feature(Feature.CHECK_CONNECTION, cmd.import_func('check_connection'))
         # self._add_callable_feature(
         #     Feature.TRANSITION_CONTROL_PANEL, cmd.import_func('transition_control_panel')
         # )
