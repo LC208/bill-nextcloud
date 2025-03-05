@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mgrdata>
+	<plugin name="nextcloud">
+		<group>processing_module</group>
+		<author>BILLmanager team</author>
+		<params>
+			<priority lang="ru">3700</priority>
+			<priority lang="en">1800</priority>
+			<type name="backupservice"/>
+		</params>
+	</plugin>
+
+	<metadata name="processing.edit.nextcloud" type="form">
+		<form>
+			<page name="methodprops">
+				<field name="base_url">
+					<input type="text" name="base_url" private="yes" required="yes" />
+				</field>
+				<field name="nc_username">
+					<input type="text" name="nc_username" private="yes" required="yes"/>
+				</field>
+				<field name="nc_password">
+					<input type="text" name="nc_password" private="yes" required="yes"/>
+				</field>
+			</page>
+		</form>
+	</metadata>
+</mgrdata>
