@@ -10,16 +10,17 @@ sys.path.insert(0, "/usr/local/mgr5/lib/python")
 from billmgr.modules.processing import ProcessingModule, Feature
 from billmgr.exception import XmlException
 import billmgr.logger as logging
+import utils.consts as Params
 
 logging.init_logging('pmnextcloud')
-logger = logging.get_logger('pmnextcloud')
+LOGGER = logging.get_logger('pmnextcloud')
 
 class NextcloudModule(ProcessingModule):
     '''
         Реализация billmgr.modules.processing.ProcessingModule
     '''
     def __init__(self) -> None:
-        super().__init__(itemtypes=["backupservice"])
+        super().__init__(itemtypes=[Params.ITEMTYPE])
         self.add_argument("--password", type=str, help="userpassword", dest="password")
         self.add_argument("--userid", type=str, help="userid", dest="user_id")
         self.add_argument("--subcommand", type=str, help="subaction", dest='action')
@@ -39,9 +40,9 @@ class NextcloudModule(ProcessingModule):
 
     def _on_raise_exception(self, args, err: XmlException) -> None:
         super()._on_raise_exception(args,err)
-        logger.extinfo(args)
+        LOGGER.extinfo(args)
         sys.stdout.write(err.as_xml())
 
 if __name__ == "__main__":
-    logger.extinfo(sys.argv)
+    LOGGER.extinfo(sys.argv)
     NextcloudModule().run()
