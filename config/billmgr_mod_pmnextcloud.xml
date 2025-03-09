@@ -26,6 +26,15 @@
 		</form>
 	</metadata>
 
+
+	<metadata name="pricelist.pmnextcloud" type="form">
+		<form>
+			<field name="usergroup">
+				<input name="usergroup" type="text" />
+			</field>
+		</form>
+	</metadata>
+
     <lang name="ru">
 		<messages name="plugin">
 			<msg name="desc_short_pmnextcloud">NextCloud</msg>
@@ -35,6 +44,10 @@
 		<messages name="label_processing_modules">
 			<msg name="pmnextcloud">NextCloud</msg>
 			<msg name="module_pmnextcloud">NextCloud</msg>
+		</messages>
+		<messages name="pricelist.pmnextcloud">
+			<msg name="usergroup">Группа пользователя</msg>
+			<msg name="hint_usergroup">Группа, которая будет назначена аккаунту пользователю при его создании в NextCloud</msg>
 		</messages>
 		<messages name="processing.edit.pmnextcloud">
 			<msg name="base_url">URL</msg>

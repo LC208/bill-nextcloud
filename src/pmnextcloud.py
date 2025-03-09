@@ -22,7 +22,7 @@ class NextcloudModule(ProcessingModule):
     """
 
     def __init__(self) -> None:
-        super().__init__(itemtypes=[Params.ITEMTYPE])
+        super().__init__(itemtypes=Params.ITEMTYPE)
         self.add_argument("--password", type=str, help="userpassword", dest="password")
         self.add_argument("--userid", type=str, help="userid", dest="user_id")
         self.add_argument("--subcommand", type=str, help="subaction", dest="action")
@@ -37,6 +37,11 @@ class NextcloudModule(ProcessingModule):
         self._add_callable_feature(Feature.RESUME, cmd.import_func("resume"))
         self._add_callable_feature(Feature.SUSPEND, cmd.import_func("suspend"))
         self._add_callable_feature(Feature.SET_PARAM, cmd.import_func("set_param"))
+        self._add_feature(Feature.PRICELIST_DYNAMIC_SETTINGS)
+        # self._add_callable_feature(
+        #     Feature.PRICELIST_DYNAMIC_SETTINGS_TUNE,
+        #     cmd.import_func("pricelist_dynamic_settings_tune"),
+        # )
         # self._add_callable_feature(ExFeature.STAT, cmd.import_func("set_param"))
         # self._add_callable_feature(
         #     Feature.TRANSITION_CONTROL_PANEL, cmd.import_func('transition_control_panel')
