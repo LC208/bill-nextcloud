@@ -2,7 +2,7 @@ from utils.api import NextCloudAPI
 import billmgr.misc as misc
 from pmnextcloud import LOGGER
 from utils.misc import from_muliple_keys, get_billaccount_email
-from utils.consts import DISK_SPACE, DISK_SPACE_DEFAULT, MEASURE_DICT, MEASURE_DEFAULT
+from utils.consts import DISK_SPACE, DISK_SPACE_DEFAULT, MEASURE_DEFAULT  # MEASURE_DICT
 import secrets
 import string
 
@@ -23,7 +23,8 @@ def open(item: int) -> None:
             username,
             password,
             email,
-            int(quota[0]) * MEASURE_DICT.get(quota[1], 1),
+            int(quota[0]) * misc.get_relation(quota[1], MEASURE_DEFAULT),
+            # int(quota[0]) * MEASURE_DICT.get(quota[1], 1)
         )
         is None
     ):
