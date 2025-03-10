@@ -68,11 +68,11 @@ class NextCloudAPI:
                 return response
         return None
 
-    def create_user(self, username: str, password: str, email: str, quota: int):
+    def create_user(self, userid: str, password: str, email: str, quota: int):
         """
         Создаёт нового пользователя в NextCloud.
 
-        :param username: Имя пользователя
+        :param userid: Идентификатор пользователя
         :param password: Пароль
         :param email: Электронная почта
         :param quota: Квота (размер дискового пространства в мегабайтах)
@@ -80,12 +80,22 @@ class NextCloudAPI:
         """
         endpoint = "users"
         data = {
-            "userid": username,
+            "userid": userid,
             "password": password,
             "email": email,
             "quota": quota,
         }
         return self._request("POST", endpoint, data=data)
+
+    def delete_user(self, userid: str):
+        """
+        Удаляет пользователя в NextCloud.
+
+        :param userid: Идентификатор пользователя
+        :return: Ответ API или None в случае ошибки
+        """
+        endpoint = f"users/{userid}"
+        return self._request("DELETE", endpoint)
 
     def get_groups(self, search: str = None, limit: int = None, offset: int = None):
         """
