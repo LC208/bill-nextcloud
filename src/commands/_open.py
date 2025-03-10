@@ -29,6 +29,9 @@ def open(item: int) -> None:
     ):
         LOGGER.error("Can't create user in NextCloud")
         raise Exception("Error on Nextcloud side")
+    if usergroup not in api.get_groups(search=usergroup):
+        api.create_group(usergroup)
+    api.add_user_to_group(username, usergroup)
     misc.save_param(item, param="username", value=username)
     misc.save_param(item, param="userpassword", value=password, crypted=True)
     misc.postopen(item)
