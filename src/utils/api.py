@@ -34,16 +34,16 @@ class NextCloudAPI:
         response = requests.request(
             method, url, headers=headers, auth=self.auth, params=params, data=data
         )
-        LOGGER.info(f"Error: {response.status_code}, {response.text}")
+        LOGGER.info(f"{response.status_code}, {response.text}")
         if response.status_code == 200:
             json = response.json()
-        if json["ocs"]["meta"]["statuscode"] == 200:
-            return response
+            if json["ocs"]["meta"]["statuscode"] == 200:
+                return response
+            return None
         else:
-            LOGGER.error(f"Error: {response.status_code}, {response.text}")
             return None
 
-    def create_user(self, username, password, email, quota):
+    def create_user(self, username: str, password: str, email: str, quota: int):
         """Создание нового пользователя"""
         endpoint = "users"
         data = {
@@ -54,7 +54,57 @@ class NextCloudAPI:
         }
         return self._request("POST", endpoint, data=data)
 
-    def get_users(self):
-        """Получить список пользователей"""
+    def get_groups(self, search=None, limit=None, offset=None):
+        """Получение списка групп с возможностью фильтрации и пагинации"""
+        endpoint = f"groups"
+        params = {}
+        if search is not None:
+            params["search"] = search
+        if limit is not None:
+            params["limit"] = limit
+        if offset is not None:
+            params["offset"] = offset
+        response = self._request("GET", endpoint, params=params)
+        if response:
+            return response.json()["ocs"]["data"]["groups"]
+        return None
+
+    def create_group(self, groupid: str):
+        endpoint = f"groups"
+        data = {
+            "groupid": groupid,
+        }
+        return self._request("POST", endpoint, data=data)
+
+    def add_user_to_group(self, userid: str, groupid: str):
+        endpoint = f"users/{userid}/groups"
+        data = {
+            "groupid": groupid,
+        }
+        return self._request("POST", endpoint, data=data)
+
+    def suspend_user(self, userid: str):
+        endpoint = f"users/{userid}/disable"
+        return self._request("PUT", endpoint)
+
+    def unsuspend_user(self, userid: str):
+        endpoint = f"users/{userid}/enable"
+        return self._request("PUT", endpoint)
+
+    def get_users(self, search=None, limit=None, offset=None):
+        """Получение списка пользователей с возможностью фильтрации и пагинации"""
         endpoint = "users"
-        return self._request("GET", endpoint)
+        params = {}
+
+        if search is not None:
+            params["search"] = search
+        if limit is not None:
+            params["limit"] = limit
+        if offset is not None:
+            params["offset"] = offset
+
+        response = self._request("GET", endpoint, params=params)
+
+        if response:
+            return response.json()["ocs"]["data"]["users"]
+        return None
