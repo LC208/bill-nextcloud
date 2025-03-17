@@ -27,7 +27,7 @@ class NextcloudModule(ProcessingModule):
         self.add_argument("--userid", type=str, help="userid", dest="user_id")
         self.add_argument("--subcommand", type=str, help="subaction", dest="action")
         self.add_argument("--itemtype", type=str, help="itemtype", dest="itemtype")
-        self.set_description("Модуль для панели Nextcloud")
+        self.set_description("Модуль для панели NextCloud")
 
         self._add_callable_feature(
             Feature.CHECK_CONNECTION, cmd.import_func("check_connection")

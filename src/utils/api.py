@@ -4,18 +4,25 @@ from pmnextcloud import LOGGER
 from requests.auth import HTTPBasicAuth
 from urllib.parse import urlparse
 from utils.consts import API_VERSION
-import xml.etree.ElementTree as ET
+from abc import ABC, abstractmethod
 
 
-class NextCloudAPI:
+class IAPIClient(ABC):
+    @abstractmethod
+    def request(
+        self, method: str, endpoint: str, params: dict = None, data: dict = None
+    ):
+        pass
+
+
+class NextCloudAPIClient(IAPIClient):
     """
-    Класс для взаимодействия с API NextCloud.
+    Класс для выполнения HTTP-запросов к API NextCloud.
     """
 
     def __init__(self, base_url: str, username: str, password: str):
         """
         Инициализация API клиента.
-
         :param base_url: URL NextCloud
         :param username: Имя пользователя
         :param password: Пароль пользователя
@@ -31,25 +38,24 @@ class NextCloudAPI:
         Создаёт объект API из кода услуги.
 
         :param item: Код услуги
-        :return: Экземпляр NextCloudAPI
+        :return: Экземпляр NextCloudAPIClient
         """
         processingmodule_id = misc.get_item_processingmodule(item)
         processingparam = misc.get_module_params(processingmodule_id)
         base_url = processingparam["base_url"]
         username = processingparam["nc_username"]
         password = processingparam["nc_password"]
-        return NextCloudAPI(
+        return NextCloudAPIClient(
             f"{urlparse(base_url).scheme}://{urlparse(base_url).netloc}",
             username,
             password,
         )
 
-    def _request(
+    def request(
         self, method: str, endpoint: str, params: dict = None, data: dict = None
     ):
         """
         Выполняет запрос к API NextCloud.
-
         :param method: HTTP-метод запроса (GET, POST, PUT, DELETE)
         :param endpoint: Конечная точка API
         :param params: Параметры запроса (опционально)
@@ -61,130 +67,79 @@ class NextCloudAPI:
         response = requests.request(
             method, url, headers=headers, auth=self.auth, params=params, data=data
         )
-        LOGGER.info(f"{url}, {response.status_code}, {response.text}")
+        LOGGER.info(f"{method}, {url}, {response.status_code}, {response.text}")
         if response.status_code == 200:
             json = response.json()
             if json["ocs"]["meta"]["statuscode"] == 200:
                 return response
         return None
 
+
+class IUserService(ABC):
+    @abstractmethod
     def create_user(self, userid: str, password: str, email: str, quota: int):
-        """
-        Создаёт нового пользователя в NextCloud.
+        pass
 
-        :param userid: Идентификатор пользователя
-        :param password: Пароль
-        :param email: Электронная почта
-        :param quota: Квота (размер дискового пространства в мегабайтах)
-        :return: Ответ API или None в случае ошибки
-        """
-        endpoint = "users"
-        data = {
-            "userid": userid,
-            "password": password,
-            "email": email,
-            "quota": quota,
-        }
-        return self._request("POST", endpoint, data=data)
+    @abstractmethod
+    def delete_user(self, userid: str):
+        pass
 
+    @abstractmethod
     def update_user_quota(self, userid: str, quota: int):
-        """
-        Создаёт нового пользователя в NextCloud.
+        pass
 
-        :param userid: Идентификатор пользователя
-        :param quota: Квота (размер дискового пространства в мегабайтах)
-        :return: Ответ API или None в случае ошибки
-        """
-        endpoint = f"users/{userid}"
-        data = {"key": "quota", "value": quota}
-        return self._request("PUT", endpoint, data=data)
+    @abstractmethod
+    def suspend_user(self, userid: str):
+        pass
+
+    @abstractmethod
+    def resume_user(self, userid: str):
+        pass
+
+    @abstractmethod
+    def get_users(self, search: str = None, limit: int = None, offset: int = None):
+        pass
+
+
+class GroupService(ABC):
+    @abstractmethod
+    def create_group(self, groupid: str):
+        pass
+
+    @abstractmethod
+    def add_user_to_group(self, userid: str, groupid: str):
+        pass
+
+    @abstractmethod
+    def remove_user_from_group(self, userid: str, groupid: str):
+        pass
+
+
+class NextCloudUserService(IUserService):
+    def __init__(self, api: IAPIClient):
+        self.api = api
+
+    def create_user(self, userid: str, password: str, email: str, quota: int):
+        endpoint = "users"
+        data = {"userid": userid, "password": password, "email": email, "quota": quota}
+        return self.api.request("POST", endpoint, data=data)
 
     def delete_user(self, userid: str):
-        """
-        Удаляет пользователя в NextCloud.
-
-        :param userid: Идентификатор пользователя
-        :return: Ответ API или None в случае ошибки
-        """
         endpoint = f"users/{userid}"
-        return self._request("DELETE", endpoint)
+        return self.api.request("DELETE", endpoint)
 
-    def get_groups(self, search: str = None, limit: int = None, offset: int = None):
-        """
-        Получает список групп с возможностью фильтрации и пагинации.
-
-        :param search: Фильтр по названию группы (опционально)
-        :param limit: Ограничение количества записей (опционально)
-        :param offset: Смещение для пагинации (опционально)
-        :return: Список групп или None в случае ошибки
-        """
-        endpoint = "groups"
-        params = {}
-        if search is not None:
-            params["search"] = search
-        if limit is not None:
-            params["limit"] = limit
-        if offset is not None:
-            params["offset"] = offset
-        response = self._request("GET", endpoint, params=params)
-        if response:
-            return response.json()["ocs"]["data"]["groups"]
-        return None
-
-    def create_group(self, groupid: str):
-        """
-        Создаёт новую группу.
-
-        :param groupid: Идентификатор группы
-        :return: Ответ API или None в случае ошибки
-        """
-        endpoint = "groups"
-        data = {"groupid": groupid}
-        return self._request("POST", endpoint, data=data)
-
-    def add_user_to_group(self, userid: str, groupid: str):
-        """
-        Добавляет пользователя в группу.
-
-        :param userid: Идентификатор пользователя
-        :param groupid: Идентификатор группы
-        :return: Ответ API или None в случае ошибки
-        """
-        endpoint = f"users/{userid}/groups"
-        data = {"groupid": groupid}
-        return self._request("POST", endpoint, data=data)
-
-    def remove_user_from_group(self, userid: str, groupid: str):
-        """
-        Удаляет пользователя из группы.
-
-        :param userid: Идентификатор пользователя
-        :param groupid: Идентификатор группы
-        :return: Ответ API или None в случае ошибки
-        """
-        endpoint = f"users/{userid}/groups"
-        data = {"groupid": groupid}
-        return self._request("DELETE", endpoint, data=data)
+    def update_user_quota(self, userid: str, quota: int):
+        endpoint = f"users/{userid}"
+        data = {"key": "quota", "value": quota}
+        return self.api.request("PUT", endpoint, data=data)
 
     def suspend_user(self, userid: str):
-        """
-        Отключает пользователя (замораживает учетную запись).
-
-        :param userid: Идентификатор пользователя
-        :return: Ответ API или None в случае ошибки
-        """
         endpoint = f"users/{userid}/disable"
-        return self._request("PUT", endpoint)
+        return self.api.request("PUT", endpoint)
 
-    def unsuspend_user(self, userid: str):
-        """
-        Разблокирует пользователя (восстанавливает учетную запись).
-
-        :param userid: Идентификатор пользователя
-        :return: Ответ API или None в случае ошибки
-        """
+    def resume_user(self, userid: str):
         endpoint = f"users/{userid}/enable"
-        return self._request("PUT", endpoint)
+        return self.api.request("PUT", endpoint)
 
     def get_users(self, search: str = None, limit: int = None, offset: int = None):
         """
@@ -203,7 +158,27 @@ class NextCloudAPI:
             params["limit"] = limit
         if offset is not None:
             params["offset"] = offset
-        response = self._request("GET", endpoint, params=params)
+        response = self.api.request("GET", endpoint, params=params)
         if response:
             return response.json()["ocs"]["data"]["users"]
         return None
+
+
+class NextCloudGroupService(GroupService):
+    def __init__(self, api: IAPIClient):
+        self.api = api
+
+    def create_group(self, groupid: str):
+        endpoint = "groups"
+        data = {"groupid": groupid}
+        return self.api.request("POST", endpoint, data=data)
+
+    def add_user_to_group(self, userid: str, groupid: str):
+        endpoint = f"users/{userid}/groups"
+        data = {"groupid": groupid}
+        return self.api.request("POST", endpoint, data=data)
+
+    def remove_user_from_group(self, userid: str, groupid: str):
+        endpoint = f"users/{userid}/groups"
+        data = {"groupid": groupid}
+        return self.api.request("DELETE", endpoint, data=data)

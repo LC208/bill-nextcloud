@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 import billmgr.exception
 import billmgr.session as session
-from utils.api import NextCloudAPI
+from utils.api import NextCloudAPIClient, NextCloudUserService
 from pmnextcloud import LOGGER
 
 
@@ -16,7 +16,8 @@ def check_connection() -> None:
     base_url = base_url_node.text if base_url_node is not None else ""
     username = username_node.text if username_node is not None else ""
     password = password_node.text if password_node is not None else ""
-    api = NextCloudAPI(base_url, username, password)
-    if api.get_users() is None:
+    api = NextCloudAPIClient(base_url, username, password)
+    user_service = NextCloudUserService(api)
+    if user_service.get_users() is None:
         LOGGER.error("Can't connect to NextCloud")
         raise billmgr.exception.XmlException("wrong_panel_info")

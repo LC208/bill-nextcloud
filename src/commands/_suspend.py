@@ -1,11 +1,13 @@
-from utils.api import NextCloudAPI
+from utils.api import NextCloudAPIClient, NextCloudUserService
 import billmgr.misc as misc
-from utils.misc import NextCloudService, User
+from utils.misc import User
 
 
 def suspend(item: int) -> None:
-    api = NextCloudAPI.from_item(item)
-    user = User(item, api)
-    service = NextCloudService(api)
-    service.suspend_user(user)
+    api_client = NextCloudAPIClient.from_item(item)
+    user_service = NextCloudUserService(api_client)
+
+    user = User(item, user_service)
+
+    user_service.suspend_user(user.username)
     misc.postsuspend(item)
