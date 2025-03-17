@@ -10,9 +10,7 @@ dependencies:
 	pip install -r ./config/requirements.txt
 
 install:
-	# xml
 	cp ./config/billmgr_mod_pmnextcloud.xml  $(XML_DIR)
-	# main exec
 	ln -snf $(shell pwd)/src/pmnextcloud.py $(EXEC_DIR)pmnextcloud
 	chmod 775 $(EXEC_DIR)pmnextcloud
 	cp ./assets/billmanager-plugin-pmnextcloud.png  $(LOGO_DIR)

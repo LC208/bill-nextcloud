@@ -100,8 +100,12 @@ class IUserService(ABC):
     def get_users(self, search: str = None, limit: int = None, offset: int = None):
         pass
 
+    @abstractmethod
+    def get_user_data(self, userid: str):
+        pass
 
-class GroupService(ABC):
+
+class IGroupService(ABC):
     @abstractmethod
     def create_group(self, groupid: str):
         pass
@@ -141,6 +145,10 @@ class NextCloudUserService(IUserService):
         endpoint = f"users/{userid}/enable"
         return self.api.request("PUT", endpoint)
 
+    def get_user_data(self, userid: str):
+        endpoint = f"users/{userid}"
+        return self.api.request("GET", endpoint)
+
     def get_users(self, search: str = None, limit: int = None, offset: int = None):
         """
         Получает список пользователей с возможностью фильтрации и пагинации.
@@ -164,7 +172,7 @@ class NextCloudUserService(IUserService):
         return None
 
 
-class NextCloudGroupService(GroupService):
+class NextCloudGroupService(IGroupService):
     def __init__(self, api: IAPIClient):
         self.api = api
 

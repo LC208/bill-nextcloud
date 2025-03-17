@@ -6,7 +6,14 @@ from utils.consts import DISK_SPACE, DISK_SPACE_DEFAULT, MEASURE_DEFAULT  # MEAS
 from pmnextcloud import LOGGER
 
 
-def from_muliple_keys(params, keys, default):
+def from_multiple_get_key(params, keys, default):
+    for key in keys:
+        if key in params:
+            return key
+    return default
+
+
+def from_multiple_keys(params, keys, default):
     for key in keys:
         if key in params:
             return params[key]
@@ -48,7 +55,7 @@ class User:
         return "".join(secrets.choice(alphabet) for _ in range(length))
 
     def get_quota(self):
-        quota = from_muliple_keys(
+        quota = from_multiple_keys(
             misc.itemaddons(self.item), DISK_SPACE, DISK_SPACE_DEFAULT
         )
         return int(quota[0]) * misc.get_relation(quota[1], MEASURE_DEFAULT)
