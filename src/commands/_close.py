@@ -1,11 +1,11 @@
 from utils.api import NextCloudAPI
 import billmgr.misc as misc
-from pmnextcloud import LOGGER
+from utils.misc import NextCloudService, User
 
 
 def close(item: int) -> None:
     api = NextCloudAPI.from_item(item)
-    if api.delete_user(f"user_{item}") is None:
-        LOGGER.error("Can't delete user in NextCloud")
-        raise Exception("Error on Nextcloud side")
+    user = User(item, api)
+    service = NextCloudService(api)
+    service.delete_user(user)
     misc.postclose(item)

@@ -1,11 +1,11 @@
 from utils.api import NextCloudAPI
 import billmgr.misc as misc
-from pmnextcloud import LOGGER
+from utils.misc import NextCloudService, User
 
 
 def resume(item: int) -> None:
     api = NextCloudAPI.from_item(item)
-    if api.unsuspend_user(f"user_{item}") is None:
-        LOGGER.error("Can't disable user in NextCloud")
-        raise Exception("Error on Nextcloud side")
+    user = User(item, api)
+    service = NextCloudService(api)
+    service.resume_user(user)
     misc.postresume(item)
