@@ -61,7 +61,7 @@ class NextCloudAPI:
         response = requests.request(
             method, url, headers=headers, auth=self.auth, params=params, data=data
         )
-        LOGGER.info(f"{response.status_code}, {response.text}")
+        LOGGER.info(f"{url}, {response.status_code}, {response.text}")
         if response.status_code == 200:
             json = response.json()
             if json["ocs"]["meta"]["statuscode"] == 200:
@@ -86,6 +86,18 @@ class NextCloudAPI:
             "quota": quota,
         }
         return self._request("POST", endpoint, data=data)
+
+    def update_user_quota(self, userid: str, quota: int):
+        """
+        Создаёт нового пользователя в NextCloud.
+
+        :param userid: Идентификатор пользователя
+        :param quota: Квота (размер дискового пространства в мегабайтах)
+        :return: Ответ API или None в случае ошибки
+        """
+        endpoint = f"users/{userid}"
+        data = {"key": "quota", "value": quota}
+        return self._request("PUT", endpoint, data=data)
 
     def delete_user(self, userid: str):
         """
@@ -141,6 +153,18 @@ class NextCloudAPI:
         endpoint = f"users/{userid}/groups"
         data = {"groupid": groupid}
         return self._request("POST", endpoint, data=data)
+
+    def remove_user_from_group(self, userid: str, groupid: str):
+        """
+        Удаляет пользователя из группы.
+
+        :param userid: Идентификатор пользователя
+        :param groupid: Идентификатор группы
+        :return: Ответ API или None в случае ошибки
+        """
+        endpoint = f"users/{userid}/groups"
+        data = {"groupid": groupid}
+        return self._request("DELETE", endpoint, data=data)
 
     def suspend_user(self, userid: str):
         """

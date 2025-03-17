@@ -57,7 +57,12 @@ class User:
         pricelist_params = misc.get_pricelist_params(
             misc.iteminfo(self.item)["pricelist"]
         )
-        LOGGER.info(pricelist_params)
+        return pricelist_params.get("usergroup", "")
+
+    def get_last_usergroup(self):
+        pricelist_params = misc.get_pricelist_params(
+            misc.iteminfo(self.item)["lastpricelist"]
+        )
         return pricelist_params.get("usergroup", "")
 
     def check_if_exists(self):
@@ -86,7 +91,7 @@ class NextCloudService:
     def create_user(self, user):
         if user.exists:
             LOGGER.info(f"User {user.username} already exists in NextCloud")
-            return
+            return Exception("Error on Module side")
         if (
             self.api.create_user(user.username, user.password, user.email, user.quota)
             is None
@@ -99,10 +104,17 @@ class NextCloudService:
             self.api.create_group(user.usergroup)
         self.api.add_user_to_group(user.username, user.usergroup)
 
+    def update_userparams(self, user):
+        usergroup = user.get_last_usergroup()
+        if usergroup and not usergroup == user.usergroup:
+            self.api.remove_user_from_group(user.username, usergroup)
+            self.setup_usergroup(user)
+        self.api.update_user_quota(user.username, user.quota)
+
     def delete_user(self, user):
         if not user.exists:
             LOGGER.info(f"User {user.username} does not exist in NextCloud")
-            return
+            return Exception("Error on Module side")
         if self.api.delete_user(user.username) is None:
             LOGGER.error("Can't delete user in NextCloud")
             raise Exception("Error on Nextcloud side")
@@ -110,7 +122,7 @@ class NextCloudService:
     def resume_user(self, user):
         if not user.exists:
             LOGGER.info(f"User {user.username} does not exist in NextCloud")
-            return
+            return Exception("Error on Module side")
         if self.api.unsuspend_user(user.username) is None:
             LOGGER.error("Can't enable user in NextCloud")
             raise Exception("Error on Nextcloud side")
@@ -118,7 +130,7 @@ class NextCloudService:
     def suspend_user(self, user):
         if not user.exists:
             LOGGER.info(f"User {user.username} does not exist in NextCloud")
-            return
+            return Exception("Error on Module side")
         if self.api.suspend_user(user.username) is None:
             LOGGER.error("Can't disable user in NextCloud")
             raise Exception("Error on Nextcloud side")
