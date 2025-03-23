@@ -1,4 +1,4 @@
-from utils.api import NextCloudAPIClient, NextCloudUserService, NextCloudGroupService
+from utils.api import CloudClientFactory
 import billmgr.misc as misc
 from utils.misc import (
     User,
@@ -9,9 +9,9 @@ from pmnextcloud import LOGGER
 
 def open(item: int) -> None:
     LOGGER.info("dsadsad")
-    api_client = NextCloudAPIClient.from_item(item)
-    user_service = NextCloudUserService(api_client)
-    group_service = NextCloudGroupService(api_client)
+    api_client, user_service, group_service = (
+        CloudClientFactory.create_client_from_item(item)
+    )
 
     user = User(item, user_service)
 
@@ -19,6 +19,7 @@ def open(item: int) -> None:
     group_service.add_user_to_group(user.username, user.usergroup)
 
     repository = UserRepository(user)
+    misc.save_param(item, param="url", value=api_client.base_url)
     repository.save_credentials()
 
     misc.postopen(item)

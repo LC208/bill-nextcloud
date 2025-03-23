@@ -6,6 +6,11 @@ from utils.consts import DISK_SPACE, DISK_SPACE_DEFAULT, MEASURE_DEFAULT  # MEAS
 from pmnextcloud import LOGGER
 
 
+def get_stat_measure(item: int):
+    pricelist_params = misc.get_pricelist_params(misc.iteminfo(item)["pricelist"])
+    return pricelist_params.get("stat_measure", MEASURE_DEFAULT)
+
+
 def from_multiple_get_key(params, keys, default):
     for key in keys:
         if key in params:

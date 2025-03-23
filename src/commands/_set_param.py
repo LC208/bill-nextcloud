@@ -1,12 +1,12 @@
-from utils.api import NextCloudAPIClient, NextCloudUserService, NextCloudGroupService
+from utils.api import CloudClientFactory
 import billmgr.misc as misc
 from utils.misc import User
 
 
 def set_param(item: int, user_id: int, runningoperation: int) -> None:
-    api_client = NextCloudAPIClient.from_item(item)
-    user_service = NextCloudUserService(api_client)
-    group_service = NextCloudGroupService(api_client)
+    api_client, user_service, group_service = (
+        CloudClientFactory.create_client_from_item(item)
+    )
 
     user = User(item, user_service)
 
