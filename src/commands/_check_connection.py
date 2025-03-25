@@ -6,6 +6,7 @@ from utils.api import (
     NextCloudUserService,
     OwnCloudAPIClient,
     OwnCloudUserService,
+    APIError,
 )
 from pmnextcloud import LOGGER
 
@@ -30,6 +31,8 @@ def check_connection() -> None:
     else:
         api = OwnCloudAPIClient(base_url, username, password)
         user_service = OwnCloudUserService(api)
-    if user_service.get_users() is None:
+    try:
+        user_service.get_users()
+    except:
         LOGGER.error("Can't connect to NextCloud")
         raise billmgr.exception.XmlException("wrong_panel_info")
