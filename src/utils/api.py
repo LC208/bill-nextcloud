@@ -9,6 +9,12 @@ import xml.etree.ElementTree as ET
 import xmltodict
 
 
+class APIError(Exception):
+    """Кастомное исключение для ошибок API NextCloud"""
+
+    pass
+
+
 class IAPIClient(ABC):
     @abstractmethod
     def request(
@@ -62,7 +68,7 @@ class NextCloudAPIClient(IAPIClient):
         :param endpoint: Конечная точка API
         :param params: Параметры запроса (опционально)
         :param data: Данные запроса (опционально)
-        :return: Ответ API или None в случае ошибки
+        :return: JSON Ответ API
         """
         url = f"{self.base_url}/ocs/{API_VERSION}.php/cloud/{endpoint}"
         headers = {"OCS-APIRequest": "true", "Accept": "application/json"}
@@ -70,11 +76,16 @@ class NextCloudAPIClient(IAPIClient):
             method, url, headers=headers, auth=self.auth, params=params, data=data
         )
         LOGGER.info(f"{method}, {url}, {response.status_code}, {response.text}")
-        if response.status_code == 200:
-            json = response.json()
-            if json["ocs"]["meta"]["statuscode"] == 200:
-                return response
-        return None
+        if response.status_code != 200:
+            raise APIError(f"HTTP {response.status_code}: {response.text}")
+
+        json_response = response.json()
+        if json_response["ocs"]["meta"]["statuscode"] != 200:
+            raise APIError(
+                f"API Error {json_response['ocs']['meta']['statuscode']}: {json_response['ocs']['meta']['message']}"
+            )
+
+        return json_response
 
 
 class OwnCloudAPIClient(IAPIClient):
@@ -121,7 +132,7 @@ class OwnCloudAPIClient(IAPIClient):
         :param endpoint: Конечная точка API
         :param params: Параметры запроса (опционально)
         :param data: Данные запроса (опционально)
-        :return: Ответ API или None в случае ошибки
+        :return: JSON ответ API
         """
         url = f"{self.base_url}/ocs/{API_VERSION}.php/cloud/{endpoint}"
         headers = {
@@ -133,11 +144,22 @@ class OwnCloudAPIClient(IAPIClient):
         )
         LOGGER.info(data)
         LOGGER.info(f"{method}, {url}, {response.status_code}, {response.text}")
-        if response.status_code == 200:
+        if response.status_code != 200:
+            raise APIError(f"HTTP {response.status_code}: {response.text}")
+
+        try:
             xml_response = ET.fromstring(response.text)
-            if xml_response.find(".//meta/statuscode").text == "200":
+            status_code = xml_response.find(".//meta/statuscode")
+            if status_code is not None and status_code.text == "200":
                 return xmltodict.parse(response.text)
-        return None
+            else:
+                message = xml_response.find(".//meta/message")
+                error_message = message.text if message is not None else "Unknown error"
+                raise APIError(
+                    f"API Error {status_code.text if status_code else 'N/A'}: {error_message}"
+                )
+        except ET.ParseError as e:
+            raise APIError(f"XML Parsing Error: {str(e)}")
 
     def dict_to_xml(self, data: dict, root_tag: str = "request"):
         """
