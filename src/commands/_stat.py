@@ -22,9 +22,13 @@ def stat(module: int) -> None:
                 misc.itemaddons(item), DISK_SPACE, DISK_SPACE_DEFAULT[1]
             )
             stat_measure = get_stat_measure(item)
-            quota_to_stat = int(quota_data["used"]) * misc.get_relation(
-                MEASURE_DEFAULT, stat_measure
-            )
+            quota_to_stat = 0
+            try:
+                quota_to_stat = int(quota_data["used"]) * misc.get_relation(
+                    MEASURE_DEFAULT, stat_measure
+                )
+            except:
+                LOGGER.error("Can't get quota")
             misc.insert_stat(item, datetime.now(), param, quota_to_stat, stat_measure)
 
     misc.poststat(module, date.today())
