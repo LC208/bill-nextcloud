@@ -71,74 +71,7 @@ class NextCloudAPIClient(IAPIClient):
         :return: JSON Ответ API
         """
         url = f"{self.base_url}/ocs/{API_VERSION}.php/cloud/{endpoint}"
-        headers = {"OCS-APIRequest": "true", "Accept": "application/json"}
-        response = requests.request(
-            method, url, headers=headers, auth=self.auth, params=params, data=data
-        )
-        LOGGER.info(f"{method}, {url}, {response.status_code}, {response.text}")
-        if response.status_code != 200:
-            raise APIError(f"HTTP {response.status_code}: {response.text}")
-
-        json_response = response.json()
-        if json_response["ocs"]["meta"]["statuscode"] != 200:
-            raise APIError(
-                f"API Error {json_response['ocs']['meta']['statuscode']}: {json_response['ocs']['meta']['message']}"
-            )
-
-        return json_response
-
-
-class OwnCloudAPIClient(IAPIClient):
-    """
-    Класс для выполнения HTTP-запросов к API ownCloud.
-    """
-
-    def __init__(self, base_url: str, username: str, password: str):
-        """
-        Инициализация API клиента.
-        :param base_url: URL ownCloud
-        :param username: Имя пользователя
-        :param password: Пароль пользователя
-        """
-        self.base_url = base_url
-        self.username = username
-        self.password = password
-        self.auth = HTTPBasicAuth(self.username, self.password)
-
-    @staticmethod
-    def from_item(item):
-        """
-        Создаёт объект API из кода услуги.
-        :param item: Код услуги
-        :return: Экземпляр OwnCloudAPIClient
-        """
-        processingmodule_id = misc.get_item_processingmodule(item)
-        processingparam = misc.get_module_params(processingmodule_id)
-        base_url = processingparam["base_url"]
-        username = processingparam["nc_username"]
-        password = processingparam["nc_password"]
-        return OwnCloudAPIClient(
-            f"{urlparse(base_url).scheme}://{urlparse(base_url).netloc}",
-            username,
-            password,
-        )
-
-    def request(
-        self, method: str, endpoint: str, params: dict = None, data: dict = None
-    ):
-        """
-        Выполняет запрос к API ownCloud.
-        :param method: HTTP-метод запроса (GET, POST, PUT, DELETE)
-        :param endpoint: Конечная точка API
-        :param params: Параметры запроса (опционально)
-        :param data: Данные запроса (опционально)
-        :return: JSON ответ API
-        """
-        url = f"{self.base_url}/ocs/{API_VERSION}.php/cloud/{endpoint}"
-        headers = {
-            "OCS-APIRequest": "true",
-        }
-
+        headers = {"OCS-APIRequest": "true"}
         response = requests.request(
             method, url, headers=headers, auth=self.auth, params=params, data=data
         )
@@ -160,19 +93,6 @@ class OwnCloudAPIClient(IAPIClient):
                 )
         except ET.ParseError as e:
             raise APIError(f"XML Parsing Error: {str(e)}")
-
-    def dict_to_xml(self, data: dict, root_tag: str = "request"):
-        """
-        Преобразует словарь в XML строку.
-        :param data: Данные в виде словаря
-        :param root_tag: Корневой тег XML
-        :return: XML строка
-        """
-        root = ET.Element(root_tag)
-        for key, value in data.items():
-            element = ET.SubElement(root, key)
-            element.text = str(value)
-        return ET.tostring(root, encoding="utf-8")
 
 
 class IUserService(ABC):
@@ -256,27 +176,8 @@ class NextCloudUserService(IUserService):
         :param search: Фильтр по имени пользователя (опционально)
         :param limit: Ограничение количества записей (опционально)
         :param offset: Смещение для пагинации (опционально)
-        :return: Список пользователей или None в случае ошибки
+        :return: Список пользователей
         """
-        endpoint = "users"
-        params = {}
-        if search is not None:
-            params["search"] = search
-        if limit is not None:
-            params["limit"] = limit
-        if offset is not None:
-            params["offset"] = offset
-        response = self.api.request("GET", endpoint, params=params)
-        if response:
-            return response["ocs"]["data"]["users"]
-        return None
-
-
-class OwnCloudUserService(NextCloudUserService):
-    def __init__(self, api: IAPIClient):
-        self.api = api
-
-    def get_users(self, search: str = None, limit: int = None, offset: int = None):
         endpoint = "users"
         params = {}
         if search is not None:
@@ -324,17 +225,17 @@ class CloudClientFactory:
         username = processingparam["nc_username"]
         password = processingparam["nc_password"]
         owncloud = processingparam["owncloud"]
-        if owncloud == "on":
-            api = OwnCloudAPIClient(
-                f"{urlparse(base_url).scheme}://{urlparse(base_url).netloc}",
-                username,
-                password,
-            )
-            return api, OwnCloudUserService(api), NextCloudGroupService(api)
-        else:
-            api = NextCloudAPIClient(
-                f"{urlparse(base_url).scheme}://{urlparse(base_url).netloc}",
-                username,
-                password,
-            )
-            return api, NextCloudUserService(api), NextCloudGroupService(api)
+        # if owncloud == "on":
+        #     api = OwnCloudAPIClient(
+        #         f"{urlparse(base_url).scheme}://{urlparse(base_url).netloc}",
+        #         username,
+        #         password,
+        #     )
+        #     return api, OwnCloudUserService(api), NextCloudGroupService(api)
+        # else:
+        api = NextCloudAPIClient(
+            f"{urlparse(base_url).scheme}://{urlparse(base_url).netloc}",
+            username,
+            password,
+        )
+        return api, NextCloudUserService(api), NextCloudGroupService(api)

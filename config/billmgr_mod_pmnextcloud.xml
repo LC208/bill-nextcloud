@@ -22,9 +22,6 @@
 				<field name="nc_password">
 					<input type="text" name="nc_password" private="yes" required="yes"/>
 				</field>
-				<field name="owncloud">
-					<input type="checkbox" name="owncloud" private="yes"/>
-				</field>
 			</page>
 		</form>
 	</metadata>
@@ -60,12 +57,10 @@
 		<messages name="processing.edit.pmnextcloud">
 			<msg name="base_url">URL</msg>
 			<msg name="nc_username">Имя пользователя</msg>
-			<msg name="owncloud">ownCloud</msg>
 			<msg name="nc_password">Пароль</msg>
 			<msg name="hint_base_url">Ссылка на базовую страницу панели NextCloud, например https://my.panel.example</msg>
 			<msg name="hint_nc_username">Имя пользователя в NextCloud</msg>
 			<msg name="hint_nc_password">Пароль приложения, генерируется в NextCloud</msg>
-			<msg name="hint_owncloud">Является ли панель, панелью ownCloud</msg>
 			<msg name="placeholder_base_url">https://my.panel.example</msg>
 		</messages>
 		<messages name="msgerror">

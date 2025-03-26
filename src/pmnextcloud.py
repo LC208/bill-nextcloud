@@ -51,7 +51,7 @@ class NextcloudModule(ProcessingModule):
         Возвращает набор обязательных параметров,
         которые необходимы при настройке обработчика.
         """
-        return {"base_url": {}, "nc_username": {}, "nc_password": {}, "owncloud": {}}
+        return {"base_url": {}, "nc_username": {}, "nc_password": {}}
 
     def _on_raise_exception(self, args, err: XmlException) -> None:
         super()._on_raise_exception(args, err)

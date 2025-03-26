@@ -4,9 +4,6 @@ import billmgr.session as session
 from utils.api import (
     NextCloudAPIClient,
     NextCloudUserService,
-    OwnCloudAPIClient,
-    OwnCloudUserService,
-    APIError,
 )
 from pmnextcloud import LOGGER
 
@@ -24,13 +21,8 @@ def check_connection() -> None:
     username = username_node.text if username_node is not None else ""
     password = password_node.text if password_node is not None else ""
     owncloud = owncloud_node.text if owncloud_node is not None else ""
-    LOGGER.info(owncloud)
-    if owncloud == "off":
-        api = NextCloudAPIClient(base_url, username, password)
-        user_service = NextCloudUserService(api)
-    else:
-        api = OwnCloudAPIClient(base_url, username, password)
-        user_service = OwnCloudUserService(api)
+    api = NextCloudAPIClient(base_url, username, password)
+    user_service = NextCloudUserService(api)
     try:
         user_service.get_users()
     except:
