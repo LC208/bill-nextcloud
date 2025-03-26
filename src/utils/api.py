@@ -138,6 +138,10 @@ class IGroupService(ABC):
     def remove_user_from_group(self, userid: str, groupid: str):
         pass
 
+    @abstractmethod
+    def get_groups(self, search: str = None, limit: int = None, offset: int = None):
+        pass
+
 
 class NextCloudUserService(IUserService):
     def __init__(self, api: IAPIClient):
@@ -214,6 +218,23 @@ class NextCloudGroupService(IGroupService):
         data = {"groupid": groupid}
         return self.api.request("DELETE", endpoint, data=data)
 
+    def get_groups(self, search: str = None, limit: int = None, offset: int = None):
+        endpoint = "groups"
+        params = {}
+        if search is not None:
+            params["search"] = search
+        if limit is not None:
+            params["limit"] = limit
+        if offset is not None:
+            params["offset"] = offset
+        response = self.api.request("GET", endpoint, params=params)
+        if response:
+            if response["ocs"]["data"]["groups"]:
+                return response["ocs"]["data"]["groups"]["element"]
+            else:
+                return []
+        return None
+
 
 class CloudClientFactory:
 
@@ -224,7 +245,6 @@ class CloudClientFactory:
         base_url = processingparam["base_url"]
         username = processingparam["nc_username"]
         password = processingparam["nc_password"]
-        owncloud = processingparam["owncloud"]
         # if owncloud == "on":
         #     api = OwnCloudAPIClient(
         #         f"{urlparse(base_url).scheme}://{urlparse(base_url).netloc}",

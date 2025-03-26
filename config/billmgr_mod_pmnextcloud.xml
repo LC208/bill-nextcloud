@@ -30,10 +30,10 @@
 	<metadata name="pricelist.pmnextcloud" type="form">
 		<form>
 			<field name="usergroup">
-				<input name="usergroup" type="text" />
+				<select name="usergroup"/>
 			</field>
 			<field name="stat_measure">
-				<input type="text" name="stat_measure"/>
+				<select name="stat_measure" required="yes"/>
 			</field>
 		</form>
 	</metadata>
