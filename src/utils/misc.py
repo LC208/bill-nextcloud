@@ -79,18 +79,3 @@ class User:
 
     def check_if_exists(self):
         return self.username in self.service.get_users(search=self.username)
-
-
-class UserRepository:
-    def __init__(self, user):
-        self.user = user
-
-    def save_credentials(self):
-        misc.save_param(self.user.item, param="username", value=self.user.username)
-        if not self.user.exists:
-            misc.save_param(
-                self.user.item,
-                param="userpassword",
-                value=self.user.password,
-                crypted=True,
-            )

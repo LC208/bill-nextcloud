@@ -2,7 +2,6 @@ from utils.api import CloudClientFactory
 import billmgr.misc as misc
 from utils.misc import (
     User,
-    UserRepository,
 )
 from pmnextcloud import LOGGER
 
@@ -21,10 +20,17 @@ def open(item: int) -> None:
         raise billmgr.exception.XmlException("open_error")
     try:
         group_service.add_user_to_group(user.username, user.usergroup)
-        repository = UserRepository(user)
+        misc.save_param(user.item, param="username", value=user.username)
+        if not user.exists:
+            misc.save_param(
+                user.item,
+                param="userpassword",
+                value=user.password,
+                crypted=True,
+            )
         misc.save_param(item, param="url", value=api_client.base_url)
-        repository.save_credentials()
     except:
+        LOGGER.error("Can't save user account")
         user_service.delete_user(user.username)
     else:
         misc.postopen(item)
