@@ -65,6 +65,12 @@
 		</messages>
 		<messages name="msgerror">
 			<msg name="msg_error_wrong_panel_info">Введены неверные данные панели или панель недоступна.</msg>
+			<msg name="msg_error_close_error">Не удалось закрыть аккаунт в панели NextCloud/ownCloud.</msg>
+			<msg name="msg_error_open_error">Не удалось создать аккаунт в панели NextCloud/ownCloud.</msg>
+			<msg name="msg_error_open_colission_error">Аккаунт с таким именем пользователя уже существует в панели NextCloud/ownCloud.</msg>
+			<msg name="msg_error_resume_error">Не удалось включить аккаунт в панели NextCloud/ownCloud.</msg>
+			<msg name="msg_error_suspend_error">Не удалось выключить аккаунт в панели NextCloud/ownCloud.</msg>
+			<msg name="msg_error_set_param_error">Не удалось изменить параметры аккаунт в панели NextCloud/ownCloud.</msg>
 		</messages>
 	</lang>
 </mgrdata>
