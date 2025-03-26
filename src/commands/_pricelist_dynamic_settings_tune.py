@@ -17,7 +17,6 @@ def pricelist_dynamic_settings_tune(module):
     user_service = NextCloudUserService(api)
     group_service = NextCloudGroupService(api)
     usergroups = [""] + group_service.get_groups()
-    LOGGER.info(ET.tostring(xml)[:100])
     session.make_slist(
         xml,
         "usergroup",
