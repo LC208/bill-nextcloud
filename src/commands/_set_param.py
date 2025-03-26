@@ -1,6 +1,7 @@
 from utils.api import CloudClientFactory
 import billmgr.misc as misc
 from utils.misc import User
+from pmnextcloud import LOGGER
 
 
 def set_param(item: int, user_id: int, runningoperation: int) -> None:
@@ -10,11 +11,15 @@ def set_param(item: int, user_id: int, runningoperation: int) -> None:
 
     user = User(item, user_service)
     try:
+        LOGGER.info(user.usergroup)
+        LOGGER.info(user.get_last_usergroup())
         if user.usergroup != user.get_last_usergroup():
-            group_service.remove_user_from_group(
-                user.username, user.get_last_usergroup()
-            )
-            group_service.add_user_to_group(user.username, user.usergroup)
+            if user.get_last_usergroup() != "":
+                group_service.remove_user_from_group(
+                    user.username, user.get_last_usergroup()
+                )
+            if user.usergroup != "":
+                group_service.add_user_to_group(user.username, user.usergroup)
     except:
         LOGGER.error(
             "Error when trying to change the user group. Please check that the groups in the PM settings exist on the panel."
