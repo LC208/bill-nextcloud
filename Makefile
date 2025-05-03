@@ -4,7 +4,7 @@ LOGO_DIR = /usr/local/mgr5/skins/common/plugin-logo
 
 all: detect_os dependencies install
 
-OS := $(shell . /etc/os-release; echo $$ID)
+OS := $(shell grep ^ID= /etc/os-release | cut -d= -f2 | tr -d \")
 
 detect_os:
 	@echo "Detected OS: $(OS)"
