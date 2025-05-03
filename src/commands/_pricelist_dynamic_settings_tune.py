@@ -25,10 +25,4 @@ def pricelist_dynamic_settings_tune(module):
             for usergroup in usergroups
         ],
     )
-    measures = get_measures_from(MEASURE_DEFAULT)
-    session.make_slist(
-        xml,
-        "stat_measure",
-        [session.SlistElem(key=measure, name=measure) for measure in measures],
-    )
     ET.dump(xml)

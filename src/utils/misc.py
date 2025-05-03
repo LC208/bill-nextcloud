@@ -33,8 +33,10 @@ def get_measures_from(intname: str):
 
 
 def get_stat_measure(item: int):
-    pricelist_params = misc.get_pricelist_params(misc.iteminfo(item)["pricelist"])
-    return pricelist_params.get("stat_measure", MEASURE_DEFAULT)
+    quota =from_multiple_keys(
+            misc.itemaddons(item), DISK_SPACE, DISK_SPACE_DEFAULT
+        )
+    return quota[1]
 
 
 def from_multiple_get_key(params, keys, default):

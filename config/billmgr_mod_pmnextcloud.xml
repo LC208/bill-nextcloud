@@ -32,9 +32,6 @@
 			<field name="usergroup">
 				<select name="usergroup"/>
 			</field>
-			<field name="stat_measure">
-				<select name="stat_measure" required="yes"/>
-			</field>
 		</form>
 	</metadata>
 
@@ -50,9 +47,7 @@
 		</messages>
 		<messages name="pricelist.pmnextcloud">
 			<msg name="usergroup">Группа пользователя</msg>
-			<msg name="stat_measure">Единица измерения для статистики</msg>
 			<msg name="hint_usergroup">Группа, которая будет назначена аккаунту пользователю при его создании в NextCloud</msg>
-			<msg name="hint_stat_measure">Внутреннее имя единицы измерения в которой будет храниться статистика, должно иметь отношение с единицей измерения byte</msg>
 		</messages>
 		<messages name="processing.edit.pmnextcloud">
 			<msg name="base_url">URL</msg>
