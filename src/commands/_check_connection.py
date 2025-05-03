@@ -9,7 +9,7 @@ from pmnextcloud import LOGGER
 
 
 def check_connection() -> None:
-    """Реализация комманды для проверки подключени"""
+    """Реализация комманды для проверки подключения"""
     xml = session.get_input_xml()
     session.debug_session(xml)
     LOGGER.debug(f"xml params:{ET.tostring(xml)}")
