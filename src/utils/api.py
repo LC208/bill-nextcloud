@@ -75,7 +75,6 @@ class NextCloudAPIClient(IAPIClient):
         response = requests.request(
             method, url, headers=headers, auth=self.auth, params=params, data=data
         )
-        LOGGER.info(data)
         LOGGER.info(f"{method}, {url}, {response.status_code}, {response.text}")
         if response.status_code != 200:
             raise APIError(f"HTTP {response.status_code}: {response.text}")
