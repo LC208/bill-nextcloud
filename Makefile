@@ -4,7 +4,7 @@ PLUGIN = pmnextcloud
 SRC=$(shell pwd)
 
 dist-prepare: $(DISTDIR)/processing/pmnextcloud
-$(DISTDIR)/processing/pmnextcloud: $(SRC)/pmnextcloud.py
+$(DISTDIR)/processing/pmnextcloud: $(SRC)/src/pmnextcloud.py
 	@echo "NextCloud: Copy pmnextcloud module"
 	@mkdir -p $(DISTDIR)/processing && \
 		ln -snf $(SRC)/src/pmnextcloud.py $(DISTDIR)/processing/pmnextcloud && \

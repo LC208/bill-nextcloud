@@ -12,6 +12,18 @@ InstallDeps() {
 
 	PKGS="billmanager-plugin-python-libs python3-pip"
 
+	case ${OSTYPE} in
+		REDHAT)
+			PKGS="$PKGS coremanager-devel"
+		;;
+		DEBIAN)
+			PKGS="$PKGS coremanager-dev python3-venv"
+		;;
+		*)
+			ExitError "Unknown os type"
+		;;
+	esac
+
 	PkgInstall "${PKGS}" || ExitError "Failed to install system packages"
 
 	pip3 install --upgrade pip || ExitError "pip upgrade failed"
