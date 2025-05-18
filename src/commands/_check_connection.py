@@ -26,6 +26,6 @@ def check_connection() -> None:
     user_service = NextCloudUserService(api)
     try:
         user_service.get_users()
-    except:
-        LOGGER.error("Can't connect to NextCloud")
+    except Exception as e:
+        LOGGER.error(f"Can't connect to NextCloud: {e}")
         raise XmlException("wrong_panel_info")
