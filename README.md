@@ -20,15 +20,16 @@
 
 4. Сгенерировать пароль приложения:
 
-   * **NextCloud**
-     ![alt text](assets/nc_ex_1.png)
-     ![alt text](assets/nc_ex_2.png)
-     ![alt text](assets/nc_ex_3.png)
+   **NextCloud**  
+   ![NextCloud шаг 1](assets/nc_ex_1.png)  
+   ![NextCloud шаг 2](assets/nc_ex_2.png)  
+   ![NextCloud шаг 3](assets/nc_ex_3.png)
 
-   * **ownCloud**
-     ![alt text](assets/oc_ex_1.png)
-     ![alt text](assets/oc_ex_2.png)
-     ![alt text](assets/oc_ex_3.png)
+   **ownCloud**  
+   ![ownCloud шаг 1](assets/oc_ex_1.png)  
+   ![ownCloud шаг 2](assets/oc_ex_2.png)  
+   ![ownCloud шаг 3](assets/oc_ex_3.png)
+
 
 5. Зарегистрировать обработчик и добавить тарифы в BILLmanager.
 
