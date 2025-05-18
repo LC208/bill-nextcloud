@@ -258,3 +258,16 @@ class CloudClientFactory:
             password,
         )
         return api, NextCloudUserService(api), NextCloudGroupService(api)
+
+    @staticmethod
+    def create_client_from_module(module: int):
+        processingparam = misc.get_module_params(module)
+        base_url = processingparam["base_url"]
+        username = processingparam["nc_username"]
+        password = processingparam["nc_password"]
+        api = NextCloudAPIClient(
+            f"{urlparse(base_url).scheme}://{urlparse(base_url).netloc}",
+            username,
+            password,
+        )
+        return api, NextCloudUserService(api), NextCloudGroupService(api)

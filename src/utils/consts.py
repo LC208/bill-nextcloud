@@ -12,3 +12,4 @@ DISK_SPACE_DEFAULT = [100, "mib"]
 # }
 MEASURE_DEFAULT = "byte"
 API_VERSION = "v2"
+PICKLE_PATH = "tmp/.pmnextcloud/"

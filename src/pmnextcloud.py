@@ -41,6 +41,9 @@ class NextcloudModule(ProcessingModule):
         self._add_callable_feature(Feature.SET_PARAM, cmd.import_func("set_param"))
         self._add_callable_feature(Feature.STAT, cmd.import_func("stat"))
         self._add_callable_feature(
+            Feature.GET_SERVER_CONFIG, cmd.import_func("get_config")
+        )
+        self._add_callable_feature(
             Feature.PRICELIST_DYNAMIC_SETTINGS_TUNE,
             cmd.import_func("pricelist_dynamic_settings_tune"),
         )
