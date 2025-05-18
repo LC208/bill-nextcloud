@@ -17,7 +17,7 @@ InstallDeps() {
 			PKGS="$PKGS coremanager-devel"
 		;;
 		DEBIAN)
-			PKGS="$PKGS coremanager-dev python3-venv"
+			PKGS="$PKGS coremanager-dev"
 		;;
 		*)
 			ExitError "Unknown os type"
