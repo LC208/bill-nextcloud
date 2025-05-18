@@ -3,7 +3,6 @@ import billmgr.misc as misc
 from utils.api import NextCloudAPIClient, NextCloudUserService, NextCloudGroupService
 import xml.etree.ElementTree as ET
 from utils.consts import MEASURE_DEFAULT
-from utils.misc import get_measures_from
 
 
 def pricelist_dynamic_settings_tune(module):

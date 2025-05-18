@@ -6,36 +6,8 @@ from utils.consts import DISK_SPACE, DISK_SPACE_DEFAULT, MEASURE_DEFAULT  # MEAS
 from pmnextcloud import LOGGER
 
 
-def get_measures_from(intname: str):
-    measures_relations = [intname]
-    ans = db.db_query(
-        "SELECT m1.intname FROM measure m1 "
-        "WHERE m1.lessmeasure = (SELECT id FROM measure WHERE intname = %s)",
-        intname,
-    )
-
-    while ans:
-        new_names = []
-        for cur_lm in ans:
-            measures_relations.append(cur_lm["intname"])
-            new_names.append(cur_lm["intname"])
-
-        if not new_names:
-            break
-        placeholders = ", ".join(["%s"] * len(new_names))
-        ans = db.db_query(
-            "SELECT m1.intname FROM measure m1 "
-            f"WHERE m1.lessmeasure IN (SELECT id FROM measure WHERE intname IN ({placeholders}))",
-            *new_names,
-        )
-
-    return measures_relations
-
-
 def get_stat_measure(item: int):
-    quota =from_multiple_keys(
-            misc.itemaddons(item), DISK_SPACE, DISK_SPACE_DEFAULT
-        )
+    quota = from_multiple_keys(misc.itemaddons(item), DISK_SPACE, DISK_SPACE_DEFAULT)
     return quota[1]
 
 
