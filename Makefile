@@ -8,7 +8,7 @@ $(DISTDIR)/processing/pmnextcloud: $(SRC)/src/pmnextcloud.py
 	@echo "NextCloud: Copy pmnextcloud module"
 	@mkdir -p $(DISTDIR)/processing && \
 		ln -snf $(SRC)/src/pmnextcloud.py $(DISTDIR)/processing/pmnextcloud && \
-		chmod 744 $(DISTDIR)/processing/pmnextcloud
+		chmod 755 $(DISTDIR)/processing/pmnextcloud
 
 
 BASE ?= /usr/local/mgr5
