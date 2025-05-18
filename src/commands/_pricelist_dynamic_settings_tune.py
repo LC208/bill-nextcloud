@@ -8,7 +8,11 @@ from pmnextcloud import LOGGER
 def pricelist_dynamic_settings_tune(module):
     xml = session.get_input_xml()
     LOGGER.info(f"Unpickle preset for module {module}")
-    usergroups = misc.unpickle(PICKLE_PATH + f"/module_preset_{module}")
+    usergroups = [""]
+    try:
+        usergroups = misc.unpickle(PICKLE_PATH + f"/module_preset_{module}")
+    except Exception as e:
+        LOGGER.error(f"Can't unpickle {e}")
     session.make_slist(
         xml,
         "usergroup",
