@@ -17,10 +17,6 @@ logging.init_logging("pmnextcloud")
 LOGGER = logging.get_logger("pmnextcloud")
 
 
-class ExFeature(Enum):
-    STAT = "stat"
-
-
 class NextcloudModule(ProcessingModule):
     """
     Реализация billmgr.modules.processing.ProcessingModule
@@ -43,7 +39,7 @@ class NextcloudModule(ProcessingModule):
         self._add_callable_feature(Feature.RESUME, cmd.import_func("resume"))
         self._add_callable_feature(Feature.SUSPEND, cmd.import_func("suspend"))
         self._add_callable_feature(Feature.SET_PARAM, cmd.import_func("set_param"))
-        self._add_callable_feature(ExFeature.STAT, cmd.import_func("stat"))
+        self._add_callable_feature(Feature.STAT, cmd.import_func("stat"))
         self._add_callable_feature(
             Feature.PRICELIST_DYNAMIC_SETTINGS_TUNE,
             cmd.import_func("pricelist_dynamic_settings_tune"),
