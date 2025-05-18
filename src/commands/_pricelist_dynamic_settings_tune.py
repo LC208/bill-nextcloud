@@ -4,7 +4,6 @@ from utils.api import NextCloudAPIClient, NextCloudUserService, NextCloudGroupSe
 import xml.etree.ElementTree as ET
 from utils.consts import MEASURE_DEFAULT
 from utils.misc import get_measures_from
-from pmnextcloud import LOGGER
 
 
 def pricelist_dynamic_settings_tune(module):

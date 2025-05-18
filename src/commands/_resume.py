@@ -1,6 +1,8 @@
 from utils.api import CloudClientFactory
 import billmgr.misc as misc
 from utils.misc import User
+from billmgr.exception import XmlException
+from pmnextcloud import LOGGER
 
 
 def resume(item: int) -> None:
@@ -10,8 +12,8 @@ def resume(item: int) -> None:
     try:
         user = User(item, user_service)
         user_service.resume_user(user.username)
-    except:
+    except Exception as e:
         LOGGER.error("Can't resume user account")
-        raise billmgr.exception.XmlException("resume_error")
+        raise XmlException(f"resume_error: {e}") from e
     else:
         misc.postresume(item)

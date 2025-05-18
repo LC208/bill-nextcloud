@@ -2,6 +2,7 @@ from utils.api import CloudClientFactory
 import billmgr.misc as misc
 from utils.misc import User
 from pmnextcloud import LOGGER
+from billmgr.exception import XmlException
 
 
 def set_param(item: int, user_id: int, runningoperation: int) -> None:
@@ -20,14 +21,14 @@ def set_param(item: int, user_id: int, runningoperation: int) -> None:
                 )
             if user.usergroup != "":
                 group_service.add_user_to_group(user.username, user.usergroup)
-    except:
+    except Exception as e:
         LOGGER.error(
             "Error when trying to change the user group. Please check that the groups in the PM settings exist on the panel."
         )
     try:
         user_service.update_user_quota(user.username, user.quota)
-    except:
+    except Exception as e:
         LOGGER.error("Can't update quota of user account")
-        raise billmgr.exception.XmlException("set_param_error")
+        raise XmlException(f"set_param_quota_error: {e}") from e
     else:
         misc.postsetparam(item)

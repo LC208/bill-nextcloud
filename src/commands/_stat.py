@@ -27,8 +27,8 @@ def stat(module: int) -> None:
                 quota_to_stat = int(quota_data["used"]) * misc.get_relation(
                     MEASURE_DEFAULT, stat_measure
                 )
-            except:
-                LOGGER.error("Can't get quota")
+            except Exception as e:
+                LOGGER.error(f"Can't get quota with error: {e}")
             misc.insert_stat(item, datetime.now(), param, quota_to_stat, stat_measure)
 
     misc.poststat(module, date.today())

@@ -1,6 +1,8 @@
 from utils.api import CloudClientFactory
 import billmgr.misc as misc
 from utils.misc import User
+from billmgr.exception import XmlException
+from pmnextcloud import LOGGER
 
 
 def close(item: int) -> None:
@@ -10,8 +12,8 @@ def close(item: int) -> None:
     try:
         user = User(item, user_service)
         user_service.delete_user(user.username)
-    except:
+    except Exception as e:
         LOGGER.error("Can't delete user account")
-        raise billmgr.exception.XmlException("close_error")
+        raise XmlException(f"close_error: {e}") from e
     else:
         misc.postclose(item)

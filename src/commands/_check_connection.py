@@ -6,6 +6,7 @@ from utils.api import (
     NextCloudUserService,
 )
 from pmnextcloud import LOGGER
+from billmgr.exception import XmlException
 
 
 def check_connection() -> None:
@@ -27,4 +28,4 @@ def check_connection() -> None:
         user_service.get_users()
     except:
         LOGGER.error("Can't connect to NextCloud")
-        raise billmgr.exception.XmlException("wrong_panel_info")
+        raise XmlException("wrong_panel_info")
