@@ -25,15 +25,11 @@ InstallDeps() {
 	esac
 
 	PkgInstall "${PKGS}" || ExitError "Failed to install system packages"
-	python3 -m venv .venv || ExitError "Failed to create venv"
-	source .venv/bin/activate || ExitError "Failed to enter venv"
+	python3 -m venv venv-nextcloud || ExitError "Failed to create venv"
+	source venv-nextcloud/bin/activate || ExitError "Failed to enter venv"
 
 	pip3 install --upgrade pip || ExitError "pip upgrade failed"
 	pip3 install -r ./requirements.txt || ExitError "Failed to install Python dependencies"
-    DIR=$(pwd)
-	VENV_PYTHON_PATH="${DIR}/venv/bin/python3"
-    ENTRYPOINT="${DIR}/src/pmnextcloud.py"
-	sed -i "1s|.*|#!${VENV_PYTHON_PATH}|" "${ENTRYPOINT}"
 }
 
 InstallNextCloud() {

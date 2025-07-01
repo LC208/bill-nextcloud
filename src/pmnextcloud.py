@@ -3,6 +3,7 @@
     Точка входа в программу
 """
 import sys
+import os
 
 sys.path.append("/usr/local/mgr5/lib/python")
 from billmgr.modules.processing import ProcessingModule, Feature
@@ -62,6 +63,24 @@ class NextcloudModule(ProcessingModule):
         sys.stdout.write(err.as_xml())
 
 
+def is_running_in_venv():
+    return sys.prefix != sys.base_prefix
+
+
 if __name__ == "__main__":
+    if not is_running_in_venv():
+        real_path = os.path.realpath(__file__)
+        real_dir = os.path.dirname(real_path)
+        VENV_PATH = os.path.abspath(
+            os.path.join(real_dir, "..", "venv-nextcloud", "bin", "python")
+        )
+        if not os.path.isfile(VENV_PATH) or not os.access(VENV_PATH, os.X_OK):
+            print(
+                f"Error: Python interpreter not found or not executable at {VENV_PATH}",
+                file=sys.stderr,
+            )
+            sys.exit(1)
+        os.execv(VENV_PATH, [VENV_PATH] + sys.argv)
+
     LOGGER.extinfo(sys.argv)
     NextcloudModule().run()
