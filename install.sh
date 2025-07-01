@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
 . /usr/local/mgr5/lib/pkgsh/core_pkg_funcs.sh
 
@@ -10,7 +10,7 @@ ExitError() {
 InstallDeps() {
 	Info "Installing dependencies..."
 
-	PKGS="billmanager-plugin-python-libs python3-pip"
+	PKGS="billmanager-plugin-python-libs python3-pip python3-venv"
 
 	case ${OSTYPE} in
 		REDHAT)
@@ -25,9 +25,15 @@ InstallDeps() {
 	esac
 
 	PkgInstall "${PKGS}" || ExitError "Failed to install system packages"
+	python3 -m venv .venv || ExitError "Failed to create venv"
+	source .venv/bin/activate || ExitError "Failed to enter venv"
 
 	pip3 install --upgrade pip || ExitError "pip upgrade failed"
 	pip3 install -r ./requirements.txt || ExitError "Failed to install Python dependencies"
+    DIR=$(pwd)
+	VENV_PYTHON_PATH="${DIR}/venv/bin/python3"
+    ENTRYPOINT="${DIR}/src/pmnextcloud.py"
+	sed -i "1s|.*|#!${VENV_PYTHON_PATH}|" "${ENTRYPOINT}"
 }
 
 InstallNextCloud() {
