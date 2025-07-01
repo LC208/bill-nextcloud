@@ -32,18 +32,18 @@ InstallDeps() {
 	pip3 install -r ./requirements.txt || ExitError "Failed to install Python dependencies"
 }
 
-InstallNextCloud() {
-	Info "Install NextCloud..."
+InstallNextcloud() {
+	Info "Install Nextcloud..."
 
 	CURRDIR=$(pwd)
 	DESTDIR=/usr/local/mgr5/src/pmnextcloud
 
 	mkdir -p ${DESTDIR} && cp -rfa "${CURRDIR}"/* ${DESTDIR}/
-	cd ${DESTDIR} && make install || ExitError "Install NextCloud failed"
+	cd ${DESTDIR} && make install || ExitError "Install Nextcloud failed"
 	cd ${CURRDIR}
 
 	Info "Install successfuly finished"
 }
 
 InstallDeps
-InstallNextCloud
+InstallNextcloud

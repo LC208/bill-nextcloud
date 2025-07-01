@@ -5,7 +5,7 @@ SRC=$(shell pwd)
 
 dist-prepare: $(DISTDIR)/processing/pmnextcloud
 $(DISTDIR)/processing/pmnextcloud: $(SRC)/src/pmnextcloud.py
-	@echo "NextCloud: Copy pmnextcloud module"
+	@echo "Nextcloud: Copy pmnextcloud module"
 	@mkdir -p $(DISTDIR)/processing && \
 		ln -snf $(SRC)/src/pmnextcloud.py $(DISTDIR)/processing/pmnextcloud && \
 		chmod 755 $(DISTDIR)/processing/pmnextcloud
