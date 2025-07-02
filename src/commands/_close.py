@@ -14,6 +14,10 @@ def close(item: int) -> None:
         user_service.delete_user(user.username)
     except Exception as e:
         LOGGER.error("Can't delete user account")
+        if "404" in str(e):
+            LOGGER.error(
+                "The account doesn't exist, or it may have been manually deleted from the Nextcloud panel. In this case, you need to resolve the issue manually."
+            )
         raise XmlException(f"close_error: {e}") from e
     else:
         misc.postclose(item)
