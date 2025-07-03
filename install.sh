@@ -10,14 +10,14 @@ ExitError() {
 InstallDeps() {
 	Info "Installing dependencies..."
 
-	PKGS="billmanager-plugin-python-libs python3-pip python3-venv"
+	PKGS="billmanager-plugin-python-libs python3-pip"
 
 	case ${OSTYPE} in
 		REDHAT)
 			PKGS="$PKGS coremanager-devel"
 		;;
 		DEBIAN)
-			PKGS="$PKGS coremanager-dev"
+			PKGS="$PKGS coremanager-dev python3-venv"
 		;;
 		*)
 			ExitError "Unknown os type"
