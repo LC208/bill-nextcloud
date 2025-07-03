@@ -26,10 +26,10 @@ InstallDeps() {
 
 	PkgInstall "${PKGS}" || ExitError "Failed to install system packages"
 	python3 -m venv venv-nextcloud || ExitError "Failed to create venv"
-	source venv-nextcloud/bin/activate || ExitError "Failed to enter venv"
+	VENV_DIR="./venv-nextcloud"
 
-	pip3 install --upgrade pip || ExitError "pip upgrade failed"
-	pip3 install -r ./requirements.txt || ExitError "Failed to install Python dependencies"
+	"$VENV_DIR/bin/pip3" install --upgrade pip || ExitError "pip upgrade failed"
+	"$VENV_DIR/bin/pip3" install -r ./requirements.txt || ExitError "Failed to install Python dependencies"
 }
 
 InstallNextcloud() {
