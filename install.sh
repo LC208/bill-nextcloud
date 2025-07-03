@@ -10,7 +10,7 @@ ExitError() {
 InstallDeps() {
 	Info "Installing dependencies..."
 
-	PKGS="billmanager-plugin-python-libs python3-pip"
+	PKGS="billmanager-plugin-python-libs python3-pip make"
 
 	case ${OSTYPE} in
 		REDHAT)
