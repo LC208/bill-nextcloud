@@ -50,6 +50,10 @@ class NextcloudModule(ProcessingModule):
         )
         self._add_feature(Feature.PRICELIST_DYNAMIC_SETTINGS)
 
+        self._add_callable_feature(
+            Feature.CONNECTION_FORM_TUNE, cmd.import_func("tune_connection")
+        )
+
     def get_module_param(self) -> Dict[str, Dict[str, str]]:
         """
         Возвращает набор обязательных параметров,
