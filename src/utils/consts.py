@@ -1,7 +1,7 @@
 ITEMTYPE = [
     "backupservice",
 ]
-DISK_SPACE = ["disk disc", "disk", "disc", "disc disk"]
+DISK_SPACE = ["disk", "disc"]
 DISK_SPACE_DEFAULT = [100, "mib"]
 # MEASURE_DICT = {
 #     "mib": 1048576,
