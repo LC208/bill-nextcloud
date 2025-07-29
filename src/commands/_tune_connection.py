@@ -14,7 +14,6 @@ def tune_connection():
     username_node = xml.find("./nc_username")
     password_node = xml.find("./nc_password")
     func_node = xml.find("./func")
-    LOGGER.info(ET.tostring(xml))
     if func_node is not None and func_node.text == "processing.add.user":
         base_url = base_url_node.text if base_url_node is not None else ""
         username = username_node.text if username_node is not None else ""
