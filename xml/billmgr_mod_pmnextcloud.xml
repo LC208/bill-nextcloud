@@ -47,7 +47,7 @@
 		</messages>
 		<messages name="pricelist.pmnextcloud">
 			<msg name="usergroup">Группа пользователя</msg>
-			<msg name="hint_usergroup">Группа, которая будет назначена аккаунту пользователю при его создании в Nextcloud</msg>
+			<msg name="hint_usergroup">Группа, которая будет назначена аккаунту пользователя при его создании в Nextcloud</msg>
 		</messages>
 		<messages name="processing.edit.pmnextcloud">
 			<msg name="base_url">URL</msg>
